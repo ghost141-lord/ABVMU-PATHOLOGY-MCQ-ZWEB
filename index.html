@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PATHOLOGY ABVMU MCQ PYQ</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --accent-cyan: #38bdf8;
+            --accent-indigo: #6366f1;
+            --accent-violet: #8b5cf6;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --glass-border: rgba(255, 255, 255, 0.95);
+            --glass-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            user-select: none;
+        }
+
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #f8fafc;
+            color: var(--text-dark);
+            position: relative;
+        }
+
+        /* Top-down Anime Park Background for Title Screen */
+        .title-static-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            background: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+            filter: brightness(0.85) contrast(1.05);
+        }
+
+        .title-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            background: radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.5) 100%);
+        }
+
+        /* Pure CSS Aesthetic Background for Home & Quiz Screens */
+        .home-static-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            display: none;
+        }
+
+        body.show-home-bg .home-static-bg {
+            display: block;
+        }
+
+        /* Canvas for Cat - Z-INDEX 9999 */
+        #petCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .view-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .view-screen.active {
+            opacity: 1;
+            pointer-events: auto;
+            display: flex;
+        }
+
+        /* Title Screen Layout */
+        .screen {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .title-top-badge {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 11;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 1.3rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-container {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.25rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 36px;
+            padding: 2.5rem 2.5rem 2rem 2.5rem;
+            position: relative;
+            z-index: 11;
+        }
+
+        .app-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2rem, 3.8vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .greeting-box {
+            font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+            font-weight: 600;
+            color: var(--text-muted);
+            min-height: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .user-highlight {
+            color: #6366f1;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-enter-container {
+            position: relative;
+            display: inline-block;
+            margin-top: 0.25rem;
+        }
+
+        .btn-enter {
+            position: relative;
+            background: linear-gradient(135deg, #38bdf8 0%, #6366f1 50%, #8b5cf6 100%);
+            border: none;
+            padding: 1.1rem 2.5rem;
+            border-radius: 22px;
+            font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+            font-weight: 800;
+            color: #ffffff;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 12px 30px -5px rgba(99, 102, 241, 0.4);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .btn-enter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 32px -5px rgba(99, 102, 241, 0.55);
+        }
+
+        .btn-enter:active {
+            transform: translateY(1px);
+        }
+
+        .creator-credits {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            padding: 0.65rem 1.6rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+            margin-top: 0.35rem;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .creator-credits:hover {
+            transform: translateY(-2px);
+            border-color: #25d366;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.15);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #38bdf8, #6366f1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 0.95rem;
+        }
+
+        .creator-info {
+            text-align: left;
+        }
+
+        .creator-title {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #6366f1;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.05rem;
+        }
+
+        .creator-name {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+        }
+
+        .creator-sub {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #475569;
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+            margin-top: 0.15rem;
+        }
+
+        .tag {
+            background: #e2e8f0;
+            padding: 0.1rem 0.45rem;
+            border-radius: 6px;
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .name-input-container {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+        }
+
+        .inline-input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 2px solid rgba(226, 232, 240, 0.9);
+            border-radius: 16px;
+            font-size: 1rem;
+            outline: none;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .inline-input:focus {
+            border-color: #6366f1;
+            background: #ffffff;
+        }
+
+        /* Home Screen Layout */
+        .home-page {
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            padding: 1.5rem 2.5rem;
+            gap: 1.5rem;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(15, 23, 42, 0.2) transparent;
+        }
+
+        .home-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .home-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #38bdf8, #6366f1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+        }
+
+        .brand-text h2 {
+            color: #0f172a;
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        .brand-text p {
+            color: #64748b;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .btn-home-back {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            color: #0f172a;
+            padding: 0.65rem 1.4rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+        }
+
+        .btn-home-back:hover {
+            background: #ffffff;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+        }
+
+        /* Compact Minimal Back Icon Button for Quiz */
+        .btn-icon-back {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transition: all 0.2s ease;
+        }
+
+        .btn-icon-back:hover {
+            border-color: #6366f1;
+            color: #6366f1;
+            transform: scale(1.05);
+        }
+
+        .dashboard-hero {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .quote-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            border-radius: 28px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        }
+
+        .quote-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(135deg, #38bdf8, #8b5cf6);
+        }
+
+        .quote-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .quote-tag {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #6366f1;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-refresh-quote {
+            background: rgba(99, 102, 241, 0.1);
+            border: none;
+            color: #6366f1;
+            cursor: pointer;
+            font-size: 0.95rem;
+            padding: 0.4rem 0.6rem;
+            border-radius: 10px;
+        }
+
+        .quote-body {
+            font-size: clamp(1rem, 1.3vw, 1.15rem);
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        .quote-author {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.8rem;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            border-radius: 28px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.15));
+            color: #6366f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stat-info .stat-value {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.1;
+        }
+
+        .stat-info .stat-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .units-section {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            padding: 0 0.25rem;
+        }
+
+        .section-title {
+            color: #0f172a;
+            font-size: 1.35rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .search-box {
+            position: relative;
+            width: 260px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.55rem 1rem 0.55rem 2.4rem;
+            border-radius: 50px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            color: #0f172a;
+            font-size: 0.85rem;
+            font-weight: 600;
+            outline: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .search-box input::placeholder {
+            color: #94a3b8;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .units-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 1.1rem;
+            padding-bottom: 2.5rem;
+        }
+
+        .unit-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 1.25rem 1.35rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-3px);
+            background: #ffffff;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.07);
+        }
+
+        .unit-num-badge {
+            width: 46px;
+            height: 46px;
+            min-width: 46px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+            color: white;
+            font-size: 1.05rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .unit-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .unit-title {
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.25;
+        }
+
+        .unit-meta {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .unit-arrow {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: #6366f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        /* Scrollable Screen-filling Modern Aesthetic Quiz Mode Styles */
+        .quiz-page {
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            padding: 1.5rem 2.5rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--text-dark);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .quiz-top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-shrink: 0;
+        }
+
+        /* Stylish Quiz Top-Right Creator Badge */
+        .quiz-creator-badge {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .quiz-creator-badge:hover {
+            border-color: #6366f1;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.1);
+        }
+
+        .quiz-creator-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #38bdf8, #6366f1);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quiz-creator-text {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: 0.02em;
+        }
+
+        .quiz-unit-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0f172a, #334155);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .quiz-box-wrapper {
+            width: 100%;
+            max-width: 1400px;
+            margin: 1.5rem auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .quiz-box {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            border-radius: 32px;
+            padding: 2.5rem 3rem;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.07);
+        }
+
+        .question-meta-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+            padding: 0.45rem 1.1rem;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            margin-bottom: 1.25rem;
+            letter-spacing: 0.02em;
+        }
+
+        .question-text {
+            font-size: clamp(1.15rem, 1.8vw, 1.35rem);
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 1.75rem;
+            line-height: 1.45;
+        }
+
+        .options-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            padding: 1.1rem 1.4rem;
+            border-radius: 18px;
+            border: 2px solid #e2e8f0;
+            background: #ffffff;
+            color: #1e293b;
+            font-size: 1rem;
+            font-weight: 700;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.03);
+            transform: translateY(-1px);
+        }
+
+        .option-btn.correct {
+            background: #dcfce7 !important;
+            border-color: #22c55e !important;
+            color: #15803d !important;
+        }
+
+        .option-btn.wrong {
+            background: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #b91c1c !important;
+        }
+
+        .quiz-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .btn-action {
+            background: #0f172a;
+            border: none;
+            padding: 0.8rem 1.75rem;
+            border-radius: 14px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn-action:hover {
+            background: #1e293b;
+        }
+
+        /* Bottom Control Panel Layout for Left-Corner Search Button */
+        .quiz-bottom-panel {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto 1.5rem auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* Compact Gemini AI Mode Search Button */
+        .btn-gemini-search {
+            background: transparent !important;
+            border: none !important;
+            padding: 0.7rem 1rem;
+            border-radius: 12px;
+            color: #000000 !important;
+            font-weight: 800;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: none !important;
+            transition: all 0.2s ease;
+        }
+
+        .btn-gemini-search:hover {
+            background: rgba(255,255,255,0.18) !important;
+            transform: translateY(-1px);
+        }
+
+        .gemini-logo {
+            width: 21px;
+            height: 21px;
+            display: inline-block;
+            flex: 0 0 21px;
+            background: linear-gradient(145deg, #4285f4 5%, #8e75ff 38%, #d965ff 68%, #4285f4 100%);
+            clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+            filter: drop-shadow(0 1px 2px rgba(66,133,244,0.25));
+        }
+
+        .gemini-search-label {
+            color: #000000 !important;
+            background: none !important;
+            -webkit-background-clip: initial !important;
+            -webkit-text-fill-color: #000000 !important;
+        }
+
+        .question-navigator {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-dot {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.8rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dot:hover {
+            border-color: #cbd5e1;
+        }
+
+        .nav-dot.active {
+            border-color: #6366f1;
+            color: #6366f1;
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .nav-dot.answered-correct {
+            background: #dcfce7;
+            border-color: #22c55e;
+            color: #15803d;
+        }
+
+        .nav-dot.answered-wrong {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+
+        /* Sleek, Thin & Wide Dynamic Island Notification */
+        #dynamicIsland {
+            position: fixed;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: white;
+            padding: 0.45rem 2rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.2);
+            z-index: 99999;
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: top 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s ease;
+        }
+
+        #dynamicIsland.show {
+            top: 14px;
+            opacity: 1;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-hero { grid-template-columns: 1fr; }
+            .options-list { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .screen { padding: 1.25rem; }
+            .hero-container { padding: 1.75rem 1.25rem; border-radius: 28px; }
+            .title-top-badge { top: 1.25rem; left: 1.25rem; }
+            .home-page { padding: 1.25rem 1rem; }
+            .quiz-page { padding: 1rem; }
+            .quiz-box { padding: 1.5rem; border-radius: 24px; }
+            .units-grid { grid-template-columns: 1fr; }
+            .search-box { width: 160px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sleek, Thin & Wide Dynamic Island Notification -->
+    <div id="dynamicIsland">
+        <i class="fa-solid fa-sparkles" id="islandIcon" style="color: #38bdf8;"></i>
+        <span id="islandText">Streak notification</span>
+    </div>
+
+    <!-- Static Anime Park Background for Title Screen -->
+    <div class="title-static-bg"></div>
+    <div class="title-overlay"></div>
+
+    <!-- Static Aesthetic Background for Home & Quiz Screens -->
+    <div class="home-static-bg"></div>
+
+    <!-- Canvas for Cat (z-index: 9999) -->
+    <canvas id="petCanvas"></canvas>
+
+    <!-- Title Screen -->
+    <main class="view-screen screen active" id="titleScreen">
+        <div class="title-top-badge">
+            <div class="badge">
+                <i class="fa-solid fa-microscope"></i> ABVMU PYQ Portal
+            </div>
+        </div>
+        
+        <div class="hero-container" id="heroCard">
+            <h1 class="app-title">PATHOLOGY ABVMU MCQ PYQ</h1>
+            
+            <div class="greeting-box" id="greetingContainer"></div>
+
+            <div class="name-input-container" id="inputContainer" style="display: none;">
+                <input type="text" id="userNameInput" class="inline-input" placeholder="Enter your full name..." autocomplete="off">
+            </div>
+
+            <div class="btn-enter-container">
+                <button class="btn-enter" id="enterBtn" onclick="handleEnterClick()">
+                    ENTER THE WORLD OF PATHOLOGY
+                    <i class="fa-solid fa-arrow-right-long"></i>
+                </button>
+            </div>
+
+            <a href="https://wa.me/+919760045538" target="_blank" class="creator-credits">
+                <div class="avatar">ST</div>
+                <div class="creator-info">
+                    <div class="creator-title">Creator & Designer</div>
+                    <div class="creator-name">Shivansh Thakur</div>
+                    <div class="creator-sub">
+                        <span class="tag">MBBS '24</span>
+                        <span>GMC Firozabad</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <!-- Clean, Fast Static Home Screen Page -->
+    <section class="view-screen home-page" id="homeScreen">
+        <header class="home-header">
+            <div class="home-brand">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-dna"></i>
+                </div>
+                <div class="brand-text">
+                    <h2>PATHOLOGY PORTAL</h2>
+                    <p>ABVMU MCQ Question Bank</p>
+                </div>
+            </div>
+
+            <button class="btn-home-back" onclick="navigateToTitle()" title="Return to Title Screen">
+                <i class="fa-solid fa-arrow-left"></i> Title Screen
+            </button>
+        </header>
+
+        <div class="dashboard-hero">
+            <div class="quote-card">
+                <div class="quote-header">
+                    <span class="quote-tag"><i class="fa-solid fa-quote-left"></i> Daily Medical Quote</span>
+                    <button class="btn-refresh-quote" onclick="fetchWebMotivation()" title="New Quote">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                </div>
+                <div class="quote-body" id="quoteText">Fetching inspiring pathology motivation...</div>
+                <div class="quote-author" id="quoteAuthor">-- ABVMU Scholar</div>
+            </div>
+
+            <div class="stats-card">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">21 Units</div>
+                        <div class="stat-label">Complete Syllabus</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">ABVMU PYQs</div>
+                        <div class="stat-label">Verified Question Bank</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="units-section">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fa-solid fa-book-medical" style="color: #6366f1;"></i> Pathology Units
+                </div>
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="unitSearchInput" placeholder="Search units..." oninput="filterUnits()">
+                </div>
+            </div>
+
+            <div class="units-grid" id="unitsGrid"></div>
+        </div>
+    </section>
+
+    <!-- Scrollable Quiz Screen -->
+    <section class="view-screen quiz-page" id="quizScreen">
+        <div class="quiz-top-nav">
+            <button class="btn-icon-back" onclick="navigateToDashboard()" title="Back to Units">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="quiz-unit-title" id="quizUnitTitleHeader">Unit Name</div>
+            <a href="https://wa.me/+919760045538" target="_blank" class="quiz-creator-badge" title="Contact Creator on WhatsApp">
+                <div class="quiz-creator-avatar">ST</div>
+                <div class="quiz-creator-text">Shivansh Thakur</div>
+            </a>
+        </div>
+
+        <div class="quiz-box-wrapper">
+            <div class="quiz-box" id="quizContainerBox">
+                <!-- Dynamic Quiz Content Loaded Here -->
+            </div>
+        </div>
+
+        <div class="quiz-bottom-panel">
+            <!-- Left-Corner Compact Gemini AI Mode Search Button Container -->
+            <div id="googleSearchButtonContainer"></div>
+
+            <div class="question-navigator" id="questionNavigatorGrid">
+                <!-- Dynamic Nav Dots Loaded Here -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const GREETINGS = [
+            "Ready to conquer general pathology today?",
+            "Hope you are having a wonderful & productive day!",
+            "Let's turn past questions into future high scores!",
+            "Welcome back! Time to sharpen your diagnostic skills.",
+            "Grab a coffee and let's dive into PYQs!"
+        ];
+
+        let currentUsername = "";
+
+        function initUserSession() {
+            const savedName = localStorage.getItem('pathology_app_user');
+            if (!savedName) {
+                document.getElementById('inputContainer').style.display = 'block';
+                document.getElementById('greetingContainer').innerHTML = '<span>Welcome! Please enter your name to begin:</span>';
+            } else {
+                currentUsername = savedName;
+                document.getElementById('inputContainer').style.display = 'none';
+                displayGreeting();
+            }
+        }
+
+        function handleEnterClick() {
+            if (!currentUsername) {
+                const input = document.getElementById('userNameInput');
+                const name = input.value.trim();
+                if (name) {
+                    localStorage.setItem('pathology_app_user', name);
+                    currentUsername = name;
+                    navigateToDashboard();
+                } else {
+                    input.focus();
+                    input.style.borderColor = '#ef4444';
+                }
+            } else {
+                navigateToDashboard();
+            }
+        }
+
+        function displayGreeting() {
+            const randomGreeting = GREETINGS[Math.floor(Math.random() * GREETINGS.length)];
+            const container = document.getElementById('greetingContainer');
+            container.innerHTML = `Hey, <span class="user-highlight">${escapeHTML(currentUsername)}</span>! ${randomGreeting}`;
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag));
+        }
+
+        function navigateToDashboard() {
+            document.body.classList.add('show-home-bg');
+            document.getElementById('titleScreen').classList.remove('active');
+            document.getElementById('quizScreen').classList.remove('active');
+            document.getElementById('homeScreen').classList.add('active');
+            fetchWebMotivation();
+        }
+
+        function navigateToTitle() {
+            document.body.classList.remove('show-home-bg');
+            document.getElementById('homeScreen').classList.remove('active');
+            document.getElementById('titleScreen').classList.add('active');
+            displayGreeting();
+            if (kitten) {
+                kitten.pickNewDestinationAcrossEntireScreen();
+            }
+        }
+
+        const PATHOLOGY_UNITS = [
+            "Cell Injury",
+            "Inflammation",
+            "Genetics",
+            "Neoplasia",
+            "Immunity",
+            "CVS, Blood Vessels & Vasculitis",
+            "Respiratory System",
+            "Salivary Gland",
+            "GIT",
+            "Liver, Biliary System & Pancreas",
+            "Renal",
+            "Genital System",
+            "Breast",
+            "CNS",
+            "Endocrinology",
+            "Musculoskeletal System",
+            "Skin Pathology",
+            "Hematology: RBC",
+            "Hematology: WBC",
+            "Platelet & Bleeding Disorders",
+            "Blood Banking"
+        ];
+
+        const MCQ_DATABASE = {
+            "Cell Injury": [
+                { q: "Liquefactive necrosis is seen in:", a: ["Brain", "Breast", "Liver", "Pancreas"], correct: 0, meta: "Nov 2022, Paper I" },
+                { q: "In amyloidosis, beta pleated sheet will be seen in:", a: ["Electron microscope", "X-ray crystallography", "Congo red stain", "Phase contrast microscope"], correct: 1, meta: "Nov 2022, Paper I" },
+                { q: "All are physiological giant cells except:", a: ["Megakaryocytes", "Osteoclasts", "Syncytiotrophoblasts", "Touton giant cells"], correct: 3, meta: "Feb 2023, Paper I" },
+                { q: "Pigment whose accumulation is associated with \"Brown atrophy\" is:", a: ["Copper", "Hemosiderin", "Lipofuscin", "Anthracotic pigment"], correct: 2, meta: "Feb 2023, Paper I" },
+                { q: "Which of the following is the hallmark of programmed cell death?", a: ["Apoptosis", "Coagulation", "Fibrinoid necrosis", "Liquefaction necrosis"], correct: 0, meta: "Feb 2023, Paper I" },
+                { q: "The major fibril protein associated with hemodialysis associated amyloidosis is:", a: ["Aβ2m", "ATTR", "AA", "AL"], correct: 0, meta: "March 2024, Paper I" },
+                { q: "White infarcts occur in:", a: ["Small intestine", "Oesophagus", "Lung", "Kidney"], correct: 3, meta: "March 2024, Paper I" },
+                { q: "Touton giant cells are seen in:", a: ["Leprosy", "Syphilis", "Sarcoidosis", "Xanthogranuloma"], correct: 3, meta: "March 2024, Paper I" },
+                { q: "Barrett's Oesophagus is example of:", a: ["Metaplasia", "Atrophy", "Dystrophy", "Dysplasia"], correct: 0, meta: "June 2024, Paper I" },
+                { q: "Transformation of one type of mature epithelium into another type of mature epithelium is:", a: ["Anaplasia", "Dysplasia", "Hyperplasia", "Metaplasia"], correct: 3, meta: "June 2024, Paper I" },
+                { q: "Diabetic foot is an example of:", a: ["Wet gangrene", "Dry gangrene", "Apoptosis", "Gas gangrene"], correct: 0, meta: "June 2024, Paper I" },
+                { q: "Term \"Wear & tear pigment\" refer to:", a: ["Melanin", "Lysozyme", "Anthracotic pigment", "Lipochrome"], correct: 3, meta: "June 2024, Paper I" },
+                { q: "Caspases are involved in mechanism of:", a: ["Atherosclerosis", "Necrosis", "Inflammation", "Apoptosis"], correct: 3, meta: "June 2024, Paper I" },
+                { q: "The key enzymes involved in the execution phase of apoptosis are:", a: ["Cyclins", "Kinases", "Caspases", "Ligases"], correct: 2, meta: "Dec 2024, Paper I" },
+                { q: "Autophagy is a cellular process involved in:", a: ["Cell cycle progression", "Cellular degradation", "DNA replication", "Protein synthesis"], correct: 1, meta: "Dec 2024, Paper I" },
+                { q: "The following is a hallmark of reversible cell injury:", a: ["Mitochondrial swelling", "Pyknosis", "Karyorrhexis", "Cytoplasmic eosinophilia"], correct: 0, meta: "Dec 2024, Paper I" },
+                { q: "Telomere shortening is associated with:", a: ["Cellular immortality", "Cellular senescence", "Increased cellular lifespan", "Enhanced DNA replication"], correct: 1, meta: "Dec 2024, Paper I" },
+                { q: "Which of the following is a reversible cell injury?", a: ["Apoptosis", "Cellular swelling", "Necrosis", "Liquefactive necrosis"], correct: 1, meta: "Dec 2024, Paper I" },
+                { q: "Sirtuins are a family of proteins involved in:", a: ["Cellular senescence", "Metabolic regulation", "DNA repair", "Oxidative stress"], correct: 1, meta: "Dec 2024, Paper I" },
+                { q: "Liquefactive necrosis is seen in:", a: ["Brain", "Lung", "Spleen", "Heart"], correct: 0, meta: "April 2025, Paper I" },
+                { q: "The most common type of amyloid protein is:", a: ["ATTR amyloid", "Aβ amyloid", "AA amyloid", "AL amyloid"], correct: 3, meta: "April 2025, Paper I" },
+                { q: "The most commonly used stain for routine histological examination is:", a: ["Masson's trichrome", "Gram stain", "Periodic acid-Schiff", "Hematoxylin and eosin"], correct: 3, meta: "April 2025, Paper I" },
+                { q: "Fibrinoid necrosis is often associated with:", a: ["Viral infections", "Bacterial infections", "Ischemic injury", "Immune complex-mediated diseases"], correct: 3, meta: "April 2025, Paper I" },
+                { q: "The earliest microscopic change in reversible cell injury is:", a: ["Cellular swelling", "Karyolysis", "Karyorrhexis", "Pyknosis"], correct: 0, meta: "Oct 2025, Paper I" },
+                { q: "Apoptosis is best characterized by:", a: ["Swelling of organelles", "Random DNA degradation", "Cell shrinkage with intact cell membrane", "Inflammation around dying cells"], correct: 2, meta: "Oct 2025, Paper I" },
+                { q: "The organ most commonly enlarged in systemic amyloidosis is:", a: ["Kidney", "Heart", "Lungs", "Brain"], correct: 0, meta: "Oct 2025, Paper I" },
+                { q: "Which of the following indicates irreversible cellular injury?", a: ["Blebs in cellular membrane", "Vacuolated mitochondria", "Clumped chromatin in nucleus", "Swollen dispersed ribosomes"], correct: 1, meta: "Oct 2025, Paper I" },
+                { q: "Dystrophic calcification is seen in:", a: ["Milk alkali syndrome", "Paraneoplastic syndrome", "Monckeberg's sclerosis", "Hyperparathyroidism"], correct: 2, meta: "Oct 2025, Paper I" },
+                { q: "Infarct because of arterial occlusion is likely to be \"Red\" (hemorrhagic):", a: ["Spleen", "Heart", "Lungs", "Kidney"], correct: 2, meta: "Oct 2025, Paper I" },
+                { q: "In amyloidosis, apple-green birefringence on polarized light is due to:", a: ["Glycoproteins", "Beta-pleated sheet structure of amyloid", "Collagen", "Reticulinfibers"], correct: 1, meta: "Oct 2025, Paper I" },
+                { q: "In apoptosis, DNA fragmentation shows a ladder pattern due to:", a: ["Free radical damage", "Exonuclease activity", "Internucleosomal cleavage", "Endonuclease random cutting"], correct: 2, meta: "Oct 2025, Paper I" },
+                { q: "Gangrene in extremities due to arterial obstruction is usually:", a: ["Fat necrosis", "Dry gangrene", "Gas gangrene", "Wet gangrene"], correct: 1, meta: "Oct 2025, Paper I" }
+            ],
+            "Inflammation": [
+                { q: "Wound contraction is mediated by:", a: ["Epithelial cells", "Elastin", "Collagen", "Myofibroblasts"], correct: 3, meta: "Nov 2022, Paper I" },
+                { q: "The Centre of a characteristic tubercular granuloma shows:", a: ["Langhan's Giant cells", "Liquefactive Necrosis", "Epithelioid cells", "Caseous Necrosis"], correct: 3, meta: "Nov 2022, Paper I" },
+                { q: "Chronic granulomatous inflammation is seen in:", a: ["Sarcoidosis", "Pneumonia", "Diptheria", "Typhoid"], correct: 0, meta: "March 2024, Paper I" },
+                { q: "Wound contraction is mediated by:", a: ["Collagen", "Epithelial cells", "Myofibroblasts", "Elastin"], correct: 2, meta: "June 2024, Paper I" },
+                { q: "The mediator primarily responsible for pain during inflammation is:", a: ["Bradykinin", "Leukotriene B4", "Histamine", "Tumor necrosis factor-alpha"], correct: 0, meta: "Dec 2024, Paper I" },
+                { q: "Which of the following is NOT a cardinal sign of acute inflammation?", a: ["Swelling", "Fever", "Redness", "Pain"], correct: 1, meta: "Dec 2024, Paper I" },
+                { q: "CRP is primarily produced by:", a: ["Spleen", "Bone marrow", "Liver", "Kidney"], correct: 2, meta: "April 2025, Paper II" },
+                { q: "In chronic granulomatous inflammation, multinucleated giant cells are formed mainly by:", a: ["Plasma cells", "Activated macrophages", "Lymphocytes", "Neutrophils"], correct: 1, meta: "Oct 2025, Paper I" },
+                { q: "Which of the following types of necrosis is most commonly seen in tuberculosis?", a: ["Coagulative", "Fat necrosis", "Caseous", "Liquefactive"], correct: 2, meta: "Oct 2025, Paper I" }
+            ],
+            "Genetics": [
+                { q: "Sickle cell disease is due to:", a: ["Frame shift mutation", "Point mutation", "Nucleotide receptor blockage", "Non-sequence mutation"], correct: 1, meta: "Nov 2022, Paper I" },
+                { q: "Trisomy 13 is identified as:", a: ["Edward's syndrome", "Down's syndrome", "Patau's syndrome", "Klinefelter's syndrome"], correct: 2, meta: "Nov 2022, Paper I" },
+                { q: "Glycogen storage disease associated with accumulation of glycogen in cardiac muscle is:", a: ["Andersen disease", "Pompe disease", "McArdle disease", "Forbe's disease"], correct: 1, meta: "Feb 2023, Paper I" },
+                { q: "A sex linked recessive mode of inheritance exists in:", a: ["Myotonic dystrophy", "Duchenne muscular dystrophy", "Limb girdle dystrophy", "Polymyositis"], correct: 1, meta: "Feb 2023, Paper I" },
+                { q: "In Marfan syndrome the defect is in:", a: ["Coll alpha II", "Coll alpha III", "Fibrillin I", "Fibrillin II"], correct: 2, meta: "March 2024, Paper I" },
+                { q: "Which of these diseases listed is a X-linked disorder:", a: ["Haemophilia A", "Polycystic kidney disease", "Neurofibromatosis", "Cystic fibrosis"], correct: 0, meta: "March 2024, Paper I" },
+                { q: "Tay Sach's disease caused by inability to metabolise:", a: ["Sphingolipids", "Lipoproteins", "Glycolipids", "Gangliosides"], correct: 3, meta: "March 2024, Paper I" },
+                { q: "Trisomy 13 is defined as:", a: ["Cri du chat syndrome", "Patau syndrome", "Edward syndrome", "Klinefelter syndrome"], correct: 1, meta: "March 2024, Paper I" },
+                { q: "Gaucher's disease is caused by deficiency of:", a: ["GM2 gangliosides", "Glucokinase", "Fructokinase", "Glucocerebrosidase"], correct: 3, meta: "June 2024, Paper I" },
+                { q: "A 25-year-old male presents with tall stature, gynecomastia, and small testes. Chromosomal analysis reveals 47, XXY. Which of the following features is most characteristic of his condition?", a: ["Male infertility", "Cardiomegaly", "Intellectual disability", "Microcephaly"], correct: 0, meta: "Dec 2024, Paper I" },
+                { q: "Cystic fibrosis is caused by:", a: ["A chromosomal abnormality", "Environmental factors", "A single gene mutation", "Unknown factors"], correct: 2, meta: "Dec 2024, Paper I" },
+                { q: "The common gene mutation associated with hereditary hemochromatosis is:", a: ["BRCA1 gene", "HFE gene", "TP53 gene", "CFTR gene"], correct: 1, meta: "Dec 2024, Paper II" },
+                { q: "In an X-linked recessive inheritance pattern, who is most likely to be affected by the disease?", a: ["Males only", "Females only", "Neither males nor females", "Both males and females"], correct: 0, meta: "April 2025, Paper I" },
+                { q: "Down syndrome is caused by:", a: ["An extra copy of chromosome 21", "A gene mutation", "A viral infection", "A bacterial infection"], correct: 0, meta: "April 2025, Paper I" }
+            ],
+            "Neoplasia": [
+                { q: "Knudson two hit hypothesis is seen with:", a: ["Melanoma", "Retinoblastoma", "Lymphoma", "Osteosarcoma"], correct: 1, meta: "Nov 2022, Paper I" },
+                { q: "The term \"Carcinoma in situ\" is closely related to:", a: ["Hypertrophy", "Hyperplasia", "Dysplasia", "Metaplasia"], correct: 2, meta: "Nov 2022, Paper I" },
+                { q: "Which of the following gene acts as \"Molecular policeman\" or \"Gatekeeper gene\":", a: ["p 53", "RB", "APC", "WT 1"], correct: 0, meta: "Feb 2023, Paper I" },
+                { q: "The term \"Carcinoma in situ\" is equivalent to:", a: ["Hypertrophy", "Hyperplasia", "Dysplasia", "Metaplasia"], correct: 2, meta: "Feb 2023, Paper I" },
+                { q: "All are round cell tumors except:", a: ["Ewing's sarcoma", "Neuroblastoma", "Lymphoma", "Neurofibroma"], correct: 3, meta: "Feb 2023, Paper II" },
+                { q: "\"Psammoma bodies\" are seen in all except:", a: ["Papillary thyroid carcinoma", "Serous cystadenocarcinoma of ovary", "Medulloblastoma", "Meningioma"], correct: 2, meta: "Feb 2023, Paper II" },
+                { q: "All of the following are tumor suppressor genes except:", a: ["pRB", "BCL2", "p53", "BRCA I"], correct: 1, meta: "March 2024, Paper I" },
+                { q: "A tumour is called clonal, when the incurred genetic damage is in:", a: ["Stem cells", "Heterogenous cells", "Single precursor cell", "Multiple precursor cell"], correct: 2, meta: "March 2024, Paper I" },
+                { q: "EBV is associated with:", a: ["Hepatocellular carcinoma", "Carcinoma Colon", "Nasopharyngeal carcinoma", "Esophageal carcinoma"], correct: 2, meta: "March 2024, Paper I" },
+                { q: "Flexner Wintersteiner rosettes are seen in:", a: ["Neuroblastoma", "Retinoblastoma", "Medulloblastoma", "Ependymoma"], correct: 1, meta: "March 2024, Paper II" },
+                { q: "An example of tumor suppressor gene:", a: ["FAS", "MYC", "RAS", "Rb"], correct: 3, meta: "June 2024, Paper I" },
+                { q: "Which of the following is anti apoptotic gene:", a: ["Bax", "P 53", "bid", "Bcl 2"], correct: 3, meta: "June 2024, Paper I" },
+                { q: "The correct sequence of cell cycle is:", a: ["G0-G1-G2-S-M", "G0-G1-S-G2-M", "G0-M-G1-G2-S", "G0-S-G1-G2-M"], correct: 1, meta: "June 2024, Paper I" },
+                { q: "Hibernoma originates from:", a: ["Spindle cells", "Adipocytes", "Hobnail cells", "Mast cells"], correct: 1, meta: "March 2024, Paper II" },
+                { q: "Confirmatory immunohistochemistry marker for Neuroblastoma is:", a: ["Desmin", "Chromogranin", "S100", "CD99"], correct: 1, meta: "March 2024, Paper II" },
+                { q: "Alpha feto protein raised in which condition:", a: ["Mucinous cystadeno carcinoma", "Malignant hypertension", "Brenner tumor", "Yolk sac tumor"], correct: 3, meta: "Dec 2024, Paper II" },
+                { q: "A characteristic histopathological feature of retinoblastoma is:", a: ["Psammoma bodies", "Flexner-Wintersteiner rosettes", "Reed-Sternberg cells", "Homer-Wright rosettes"], correct: 1, meta: "Dec 2024, Paper II" },
+                { q: "Anti apoptotic gene?", a: ["BCL-XL", "Bim", "Bad", "BAX"], correct: 0, meta: "April 2025, Paper I" },
+                { q: "Retinoblastoma is primarily caused by:", a: ["Environmental factors", "Hormonal imbalance", "Genetic mutation", "Viral infection"], correct: 2, meta: "April 2025, Paper I" },
+                { q: "Carcinoembryonic antigen is most commonly elevated in:", a: ["Pancreatitis", "Gastric ulcer", "Colorectal carcinoma", "Liver cirrhosis"], correct: 2, meta: "Oct 2025, Paper I" }
+            ],
+            "Immunity": [
+                { q: "HLA is located on short arm of chromosome:", a: ["6", "8", "3", "9"], correct: 0, meta: "Nov 2022, Paper I" },
+                { q: "Major Histocompatibility Complex Class I genes are expressed on surface of all these cells except:", a: ["B cells", "T cells", "Platelets", "Macrophages"], correct: 2, meta: "Feb 2023, Paper I" },
+                { q: "An allograft is a graft between:", a: ["Identical twins", "Two individuals of same species", "Two individuals of different species", "A human and an animal"], correct: 1, meta: "Feb 2023, Paper I" },
+                { q: "Myasthenia Gravis is most commonly associated with:", a: ["Thymoma", "Thymic carcinoma", "Thymic hyperplasia", "Lymphoma"], correct: 0, meta: "Feb 2023, Paper II" },
+                { q: "Smith antigen (Sm) is associated with:", a: ["Systemic sclerosis", "Systemic lupus erythematosus", "Sjogren syndrome", "Rheumatoid arthritis"], correct: 1, meta: "March 2024, Paper I" },
+                { q: "HIV replication results in:", a: ["Decreased count of CD8+ T cells", "Increased count of CD8+ T cells", "Decreased count of CD4+ T cells", "Increased count of CD4+ T cells"], correct: 2, meta: "March 2024, Paper I" },
+                { q: "Hyperacute graft rejection is an example of this type of hypersensitivity reaction:", a: ["Type III", "Type IV", "Type I", "Type II"], correct: 3, meta: "March 2024, Paper I" },
+                { q: "Effector white blood cells of the innate immune system are:", a: ["Lymphocytes", "NK cells", "Dendritic cells", "Neutrophils"], correct: 3, meta: "March 2024, Paper I" },
+                { q: "The combination of HLA allele in each individual is called:", a: ["Diplotype", "Tetratype", "Prototype", "Haplotype"], correct: 3, meta: "March 2024, Paper I" },
+                { q: "Sclerosing retroperitoneal fibrosis is related to:", a: ["IgA", "IgM", "IgG2", "IgG4"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Anti Scl 70 antibodies are associated with:", a: ["Sheehan syndrome", "Sjogren syndrome", "Systemic lupus Erythematosus", "Scleroderma"], correct: 3, meta: "June 2024, Paper I" },
+                { q: "Which complement fragments called as \"Anaphylatoxins\":", a: ["C3 & C4", "C3a & C3b", "C5a & C3a", "C3b & C5a"], correct: 2, meta: "June 2024, Paper I" },
+                { q: "Serum sickness is an example of this type of hypersensitivity reaction:", a: ["Type II", "Type I", "Type IV", "Type III"], correct: 3, meta: "June 2024, Paper I" },
+                { q: "The most effective Antigen presenting cells (APCs) are:", a: ["Neutrophils", "Dendritic cells", "NK cells", "Lymphocytes"], correct: 1, meta: "June 2024, Paper I" },
+                { q: "Which type of white blood cell is most likely to be elevated during an allergic reaction?", a: ["Neutrophils", "Eosinophils", "Lymphocytes", "Basophils"], correct: 1, meta: "Dec 2024, Paper I" },
+                { q: "Which of the following is an example of an autoimmune disease?", a: ["Tuberculosis", "Rheumatoid arthritis", "HIV/AIDS", "Malaria"], correct: 1, meta: "Dec 2024, Paper I" },
+                { q: "Type II hypersensitivity reactions involve:", a: ["Immune complex deposition", "T-cell mediated cytotoxicity", "Antibody-mediated cell destruction", "Delayed-type hypersensitivity"], correct: 2, meta: "Dec 2024, Paper I" },
+                { q: "HIV primarily targets which cells of the immune system?", a: ["B lymphocytes", "Neutrophils", "T lymphocytes", "Macrophages"], correct: 2, meta: "Dec 2024, Paper I" },
+                { q: "A 30-year-old female presents with dyspnea, Raynaud phenomenon, and pulmonary hypertension. ANA is positive. The diagnosis is:", a: ["Mixed connective tissue disease", "Systemic lupus erythematosus", "Rheumatoid arthritis", "Systemic sclerosis"], correct: 3, meta: "Dec 2024, Paper II" },
+                { q: "Which of the following is an example of an autoimmune disease?", a: ["Rheumatoid arthritis", "Malaria", "Tuberculosis", "HIV/AIDS"], correct: 0, meta: "April 2025, Paper I" },
+                { q: "Which cells are most directly involved in rejecting a transplanted organ?", a: ["White blood cells", "Plasma cells", "Platelets", "Red blood cells"], correct: 0, meta: "April 2025, Paper I" },
+                { q: "Immune granulomas not seen in:", a: ["Syphilis", "Brucellosis", "Tuberculosis", "Silicosis"], correct: 1, meta: "April 2025, Paper I" },
+                { q: "Type I hypersensitivity is mediated by:", a: ["IgE antibodies", "T cells", "IgM antibodies", "IgG antibodies"], correct: 0, meta: "April 2025, Paper I" },
+                { q: "A neonate with hydrops fetalis due to Rh incompatibility — the antibody responsible is:", a: ["IgE", "IgA", "IgG", "IgM"], correct: 2, meta: "Oct 2025, Paper I" },
+                { q: "Which complement component is most important for chemotaxis of neutrophils?", a: ["C9", "C5a", "C3a", "Clq"], correct: 1, meta: "Oct 2025, Paper I" },
+                { q: "Hashimoto thyroiditis is associated with which antibody?", a: ["Anti-TPO", "Anti-dsDNA", "Anti-CCP", "Anti-TSHR"], correct: 0, meta: "Oct 2025, Paper II" }
+            ],
+            "CVS, Blood Vessels & Vasculitis": [
+                { q: "Virchow's Triad includes all except:", a: ["Venous Thrombosis", "Vein Injury", "Venous Stasis", "Hypercoagulability of Blood"], correct: 0, meta: "Nov 2022, Paper I" },
+                { q: "Libman-Sacks endocarditis is seen in:", a: ["Rheumatoid arthritis", "SLE", "Infective Endocarditis", "Nonbacterial thrombotic endocarditis"], correct: 1, meta: "Nov 2022, Paper I" },
+                { q: "Fat embolism is commonly seen in:", a: ["Drowning", "Hanging", "Head injuries", "Long bone fractures"], correct: 3, meta: "Nov 2022, Paper I" },
+                { q: "ANCA is associated with:", a: ["Henoch-Schonlein Purpura", "Rheumatoid Arthritis", "Goodpasture syndrome", "Wegener's granulomatosis"], correct: 3, meta: "Nov 2022, Paper II" },
+                { q: "Aschoff's bodies is seen in:", a: ["SABE", "SLE", "Sarcoidosis", "Rheumatic Fever"], correct: 3, meta: "Nov 2022, Paper II" },
+                { q: "Glomus tumor is seen in:", a: ["Soft tissue", "Retroperitoneum", "Digits", "Eye"], correct: 2, meta: "Nov 2022, Paper II" },
+                { q: "Formation of Aschoff bodies are a morphological feature of:", a: ["Chronic cholecystitis", "Chronic appendicitis", "Rheumatic heart disease", "Rheumatoid arthritis"], correct: 2, meta: "Feb 2023, Paper I" },
+                { q: "\"Onion peel appearance\" is characteristic of:", a: ["Benign hypertensive", "Malignant nephrosclerosis", "Diabetic nephropathy", "Lupus nephritis"], correct: 1, meta: "Feb 2023, Paper I" },
+                { q: "Raised ANCA levels are seen in:", a: ["Goodpasture's syndrome", "Lupus nephritis", "Renal vasculitides", "Hemolytic uremic syndrome"], correct: 2, meta: "Feb 2023, Paper II" },
+                { q: "Libmann sack's endocarditis found in:", a: ["Syphilis", "SLE", "Lymphoma", "Rheumatoid Arthritis"], correct: 1, meta: "March 2024, Paper II" },
+                { q: "Elevated cANCA is seen in:", a: ["Polyarteritis nodosa", "Churg Strauss vasculitis", "Wegener's granulomatosis", "Microscopic polyangiitis"], correct: 2, meta: "March 2024, Paper II" },
+                { q: "Which of the following seromarker is used for diagnosis of myocardial infarction:", a: ["LDH", "Troponin T", "SGOT", "SGPT"], correct: 1, meta: "March 2024, Paper II" },
+                { q: "Most common site of coronary artery atherosclerosis:", a: ["Left anterior descending coronary artery", "Right coronary artery", "Diagonal branch of LAD", "Left circumflex artery"], correct: 0, meta: "March 2024, Paper II" },
+                { q: "The gold standard for diagnosing coronary artery disease (CAD) is:", a: ["Coronary angiography", "Electrocardiogram", "Cardiac MRI", "Stress test"], correct: 0, meta: "Dec 2024, Paper II" },
+                { q: "Libman-Sacks endocarditis is most commonly associated with:", a: ["Infective endocarditis", "Systemic lupus erythematosus (SLE)", "Aortic stenosis", "Rheumatic fever"], correct: 1, meta: "Dec 2024, Paper II" },
+                { q: "A 25-year-old female presents with fever, joint pain, and a new heart murmur. Blood cultures are positive for Streptococcus viridans. This patient has which condition:", a: ["Pericarditis", "Acute rheumatic fever", "Myocarditis", "Infective endocarditis"], correct: 3, meta: "Dec 2024, Paper II" },
+                { q: "Elevated p ANCA with eosinophillia is seen in:", a: ["Polyarteritis nodosa", "Churg Strauss vasculitis", "Wegener's granulomatosis", "Microscopic polyangiitis"], correct: 1, meta: "Dec 2024, Paper II" },
+                { q: "Syphilitic Aneurysm mostly involve:", a: ["Descending aorta", "Abdominal aorta below the renal arteries", "Arch of aorta", "Abdominal aorta above the renal arteries"], correct: 2, meta: "April 2025, Paper II" },
+                { q: "The major manifestations of acute rheumatic fever (ARF) include:", a: ["Pneumonia, pleurisy, and pericarditis", "Meningitis, encephalitis, and myelitis", "Carditis, arthritis, and chorea", "Nephritis, neuritis, and myositis"], correct: 2, meta: "April 2025, Paper II" },
+                { q: "Aschoff's nodules are seen in:", a: ["Rheumatic carditis", "Libman sach's endocarditis", "Subacute bacterial endocarditis", "Nonbacterial thromboti endocarditis"], correct: 0, meta: "April 2025, Paper II" },
+                { q: "Troponin I is marker of:", a: ["Muscular disease", "Cirrhosis of liver", "Renal disease", "Myocardial Infarction"], correct: 3, meta: "April 2025, Paper II" },
+                { q: "What is the hallmark microscopic feature of rheumatic fever in the heart?", a: ["Anitschkow cells and Aschoff bodies", "Myocyte disarray", "Fibrous plaques in endocardium", "Suppurative inflammation"], correct: 0, meta: "Oct 2025, Paper II" },
+                { q: "Which cardiac marker rises earliest after myocardial infarction?", a: ["LDH", "Troponin I", "CK-MB", "Myoglobin"], correct: 3, meta: "Oct 2025, Paper II" },
+                { q: "Which of the following is not a risk factor for deep vein thrombosis?", a: ["Oral contraceptive use", "Pregnancy", "Regular aerobic exercise", "Prolonged immobility"], correct: 2, meta: "Additional Batch" },
+                { q: "Monckeberg medial calcific sclerosis is characterized by:", a: ["Intimal atheromatous plaques", "Calcification of the media of muscular arteries", "Inflammation of small vessels", "Fibrosis of the adventitia"], correct: 1, meta: "Additional Batch" },
+                { q: "The most common cause of aortic aneurysm is:", a: ["Syphilis", "Atherosclerosis", "Cystic medial degeneration", "Vasculitis"], correct: 1, meta: "Additional Batch" },
+                { q: "Buerger's disease (Thromboangiitis obliterans) is strongly associated with:", a: ["Diabetes mellitus", "Heavy tobacco use", "Hypertension", "Autoimmune connective tissue disease"], correct: 1, meta: "Additional Batch" },
+                { q: "Which vasculitis involves the temporal artery and can cause blindness?", a: ["Polyarteritis nodosa", "Giant cell (temporal) arteritis", "Takayasu arteritis", "Kawasaki disease"], correct: 1, meta: "Additional Batch" }
+            ],
+            "Respiratory System": [
+                { q: "Most common type of emphysema clinically is:", a: ["Panacinar", "Centriacinar", "Paraseptal", "Segmental"], correct: 1, meta: "Nov 2022, Paper II" },
+                { q: "Basic defect in Neonatal hyaline membrane disease is:", a: ["Shock due to sepsis", "Inhalation of toxins", "Aspiration pneumonitis", "Deficient production of surfactant"], correct: 3, meta: "Feb 2023, Paper II" },
+                { q: "All are true about Sarcoidosis except:", a: ["Bilateral hilar lymphadenopathy", "Disease of disordered immune regulation", "2/3 of patients recover with minimal or no residual disease", "Caseating granulomas"], correct: 3, meta: "Feb 2023, Paper II" },
+                { q: "Reactivated TB is most commonly located near:", a: ["Bronchus", "Lung apex", "Base", "Sub pleural"], correct: 1, meta: "March 2024, Paper II" },
+                { q: "Ferruginous bodies are seen in:", a: ["Asbestosis", "Silicosis", "Baggasosis", "Byssinosis"], correct: 0, meta: "March 2024, Paper II" },
+                { q: "Heart failure cells are found in:", a: ["Liver", "Heart", "Lung", "Kidney"], correct: 2, meta: "June 2024, Paper I" },
+                { q: "Asteroid bodies are characteristically found in which of the following lung diseases?", a: ["Sarcoidosis", "Silicosis", "Tuberculosis", "Asbestosis"], correct: 0, meta: "Dec 2024, Paper II" },
+                { q: "Primary pleural tumour is:", a: ["Lipoma", "Mesothelioma", "Myxoma", "Fibroma"], correct: 1, meta: "April 2025, Paper II" },
+                { q: "Which of the following is the most common type of lung carcinoma in smokers?", a: ["Large cell carcinoma", "Small cell carcinoma", "Adenocarcinoma", "Squamous cell carcinoma"], correct: 3, meta: "Oct 2025, Paper II" },
+                { q: "Which of the following pneumoconiosis causes fibrosis of the lower zone of lungs?", a: ["Asbestosis", "Coal worker pneumoconiosis", "Silicosis", "All of the above"], correct: 0, meta: "Oct 2025, Paper II" },
+                { q: "Alpha-1 antitrypsin deficiency is most strongly linked to:", a: ["Centriacinar emphysema", "Panacinar emphysema", "Paraseptal emphysema", "Irregular emphysema"], correct: 1, meta: "Additional Batch" },
+                { q: "Which of the following is considered a pre-malignant lesion of the lung?", a: ["Atypical adenomatous hyperplasia", "Anthracosis", "Bronchiectasis", "Pulmonary fibrosis"], correct: 0, meta: "Additional Batch" },
+                { q: "Small cell carcinoma of the lung is often associated with:", a: ["Paraneoplastic syndromes (e.g., ACTH/ADH secretion)", "Direct smoking cessation response", "Peripheral location", "Early surgical resectability"], correct: 0, meta: "Additional Batch" },
+                { q: "The most common causative agent of \"Community-Acquired Pneumonia\" is:", a: ["Staphylococcus aureus", "Streptococcus pneumoniae", "Haemophilus influenzae", "Mycoplasma pneumoniae"], correct: 1, meta: "Additional Batch" },
+                { q: "Which organism is classically associated with \"currant jelly\" sputum?", a: ["Streptococcus pneumoniae", "Klebsiella pneumoniae", "Legionella pneumophila", "Pseudomonas aeruginosa"], correct: 1, meta: "Additional Batch" }
+            ],
+            "Salivary Gland": [],
+            "GIT": [
+                { q: "Carcinoma colon is associated with all except:", a: ["High fibre diet", "Polyps", "Ulcerative colitis", "Streptococci bovis infection"], correct: 0, meta: "Nov 2022, Paper II" },
+                { q: "All are complications of typhoid ulcers except:", a: ["Perforation", "Stricture", "Sepsis", "Haemorrhage"], correct: 2, meta: "Nov 2022, Paper II" },
+                { q: "Most likely diagnosis for persistent projectile vomiting in a 2 years old child is:", a: ["Esophageal atresia", "Pyloric stenosis", "Annular pancreas", "Incomplete rotation of gut"], correct: 1, meta: "Feb 2023, Paper II" },
+                { q: "Hirschsprung disease requires histological confirmation of loss of:", a: ["Villi", "Muscularis", "Stromal layer", "Ganglion cells"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Gluten intolerance is seen in:", a: ["Celiac disease", "Whipple's disease", "Short bowel syndrome", "Tropical sprue"], correct: 0, meta: "March 2024, Paper II" },
+                { q: "Toxic megacolon is seen in:", a: ["Celiac disease", "Ulcerative colitis", "Appendicitis", "Crohn's disease"], correct: 1, meta: "March 2024, Paper II" },
+                { q: "Peut jeghar polyp commonly located at:", a: ["Appendix", "Colon", "Jejunum", "Stomach"], correct: 2, meta: "March 2024, Paper II" },
+                { q: "Barret's esophagus is a result of:", a: ["Herpes simplex", "Amoebiasis", "Esophagus varices", "Gastro-esophagial reflex"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Gastric polyp having the highest malignant potential is:", a: ["Fundic gland polyp", "Hyperplastic polyp", "Inflammatory polyp", "Adenomatous polyp"], correct: 3, meta: "Dec 2024, Paper II" },
+                { q: "A 35-year-old woman presents with chronic diarrhea and malabsorption. Duodenal biopsy shows villous atrophy and crypt hyperplasia. Anti-tissue transglutaminase antibodies are positive. The most likely diagnosis is:", a: ["Tropical sprue", "Celiac disease", "Whipple's disease", "Crohn's disease"], correct: 1, meta: "Dec 2024, Paper II" },
+                { q: "Pseudopolyps are feature of:", a: ["Crohn's disease", "Whipple's disease", "Coeliac sprue", "Ulcerative colitis"], correct: 3, meta: "April 2025, Paper II" },
+                { q: "Linitis plastica is a feature of:", a: ["Chronic gastric ulcer", "Diffuse carcinoma of stomach", "Hiatus hernia", "Lymphoma of stomach"], correct: 1, meta: "April 2025, Paper II" },
+                { q: "Which of the following medications can increase the risk of peptic ulcers?", a: ["Antihistamines", "Antivirals", "Antibiotics", "NSAIDs"], correct: 3, meta: "April 2025, Paper II" },
+                { q: "Celiac disease is an autoimmune disorder triggered by:", a: ["Gluten", "Nuts", "Dairy products", "Soy"], correct: 0, meta: "April 2025, Paper II" },
+                { q: "Which IBD (Inflammatory Bowel Disease) shows \"cobblestone mucosa\"?", a: ["Amebic colitis", "Ischemic colitis", "Ulcerative colitis", "Crohn's disease"], correct: 3, meta: "Oct 2025, Paper II" },
+                { q: "Which of the following is the most common site of peptic ulcer disease?", a: ["Duodenum", "Esophagus", "Fundus of the stomach", "Jejunum"], correct: 0, meta: "Oct 2025, Paper II" },
+                { q: "What is the most common congenital anomaly of the esophagus?", a: ["Hirschsprung disease", "Meckel diverticulum", "Esophageal atresia", "Pyloric stenosis"], correct: 2, meta: "Oct 2025, Paper II" },
+                { q: "What is the most common cause of lower GI bleed in patients under 50 years of age?", a: ["Diverticulosis", "Hemorrhoids", "Inflammatory bowel disease", "Anal fissure"], correct: 1, meta: "Oct 2025, Paper II" },
+                { q: "Which condition is characterized by a \"string sign\" on barium imaging?", a: ["Ulcerative colitis", "Crohn's disease", "Diverticulosis", "Ischemic colitis"], correct: 1, meta: "Additional Batch" },
+                { q: "The most common site for Gastric adenocarcinoma is:", a: ["Antrum and lesser curvature", "Fundus", "Greater curvature", "Cardia"], correct: 0, meta: "Additional Batch" },
+                { q: "Which marker is elevated in approximately 70-80% of patients with pancreatic cancer?", a: ["CA 19-9", "CEA", "AFP", "CA 125"], correct: 0, meta: "Additional Batch" },
+                { q: "A \"flask-shaped\" ulcer in the colon is classic for:", a: ["Salmonella infection", "Amoebic dysentery (Entamoeba histolytica)", "Ulcerative colitis", "Tuberculosis"], correct: 1, meta: "Additional Batch" },
+                { q: "Which polyposis syndrome carries the highest risk of colorectal cancer?", a: ["Peutz-Jeghers syndrome", "Juvenile polyposis", "Familial Adenomatous Polyposis (FAP)", "Cowden syndrome"], correct: 2, meta: "Additional Batch" }
+            ],
+            "Liver, Biliary System & Pancreas": [
+                { q: "Unconjugated hyperbilirubinemia is associated with:", a: ["Dubin-Johnson syndrome", "Gilbert syndrome", "Rotor syndrome", "Gall stones"], correct: 1, meta: "Nov 2022, Paper II" },
+                { q: "Incubation period of Hepatitis B is:", a: ["6 weeks to 6 months", "6 days to 6 weeks", "6 months to 6 years", "More than 6 years"], correct: 0, meta: "Nov 2022, Paper II" },
+                { q: "In acute pancreatitis, this type of necrosis occurs in peripancreatic tissue:", a: ["Fat", "Liquefaction", "Coagulative", "Fibrinoid"], correct: 0, meta: "Feb 2023, Paper I" },
+                { q: "Wilson's disease occurs due to accumulation in liver of:", a: ["Magnesium", "Calcium", "Copper", "Ferritin"], correct: 2, meta: "Feb 2023, Paper II" },
+                { q: "Mallory Bodies are found in:", a: ["Alcoholic Hepatitis", "Hemochromatosis", "Asbestosis", "Silicosis"], correct: 0, meta: "Feb 2023, Paper II" },
+                { q: "In obstructive jaundice, LFTs usually shows:", a: ["Elevated direct bilirubin and alkaline phosphatase", "Elevated indirect bilirubin and alkaline phosphatase", "Elevated direct bilirubin and ALT", "Elevated indirect bilirubin and GGT"], correct: 0, meta: "March 2024, Paper II" },
+                { q: "In a patient with liver cirrhosis, the recommended diet is?", a: ["High protein", "Low protein", "Low fiber", "High fat"], correct: 1, meta: "March 2024, Paper II" },
+                { q: "Kayser-Fleischer rings are seen in:", a: ["Cirrhosis", "Hemochromatosis", "Wilson's disease", "Portal hypertension"], correct: 2, meta: "March 2024, Paper II" },
+                { q: "Councilman bodies are seen in:", a: ["Alcoholic hepatitis", "Wilson disease", "Autoimmune hepatitis", "Viral hepatitis"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Dubin Johnson syndrome causes:", a: ["Acquired unconjugated hyperbilirubinemia", "Congenital unconjugated hyperbilirubinemia", "Acquired conjugated hyperbilirubinemia", "Congenital conjugated hyperbilirubinemia"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Nonalcoholic fatty liver disease (NAFLD) is primarily associated with:", a: ["Metabolic syndrome", "Excessive alcohol consumption", "Autoimmune liver disease", "Viral hepatitis"], correct: 0, meta: "Dec 2024, Paper II" },
+                { q: "A 60-year-old male presents with abdominal distension and jaundice. Ascitic fluid analysis shows a serum-ascitic albumin gradient (SAAG) > 1.1 g/dL. The probable cause is:", a: ["Pancreatic ascites", "Peritoneal tuberculosis", "Malignancy", "Cirrhosis"], correct: 3, meta: "Dec 2024, Paper II" },
+                { q: "Nutmeg liver is a condition characterized by:", a: ["Acute hepatitis", "Cirrhosis", "Hepatic venous congestion", "Fatty liver disease"], correct: 2, meta: "April 2025, Paper I" },
+                { q: "What is the primary characteristic of Wilson's disease?", a: ["Copper accumulation", "Potassium depletion", "Iron overload", "Calcium deficiency"], correct: 0, meta: "April 2025, Paper II" },
+                { q: "Councilman bodies are seen in:", a: ["Wilson's disease", "Autoimmune hepatitis", "Alcoholic cirrhosis", "Acute viral hepatitis"], correct: 3, meta: "April 2025, Paper II" },
+                { q: "Which protein is produced exclusively by the liver?", a: ["Globular protein", "Scleroprotein", "Keratin", "Albumin"], correct: 3, meta: "Oct 2025, Paper II" },
+                { q: "The most sensitive serum marker for biliary tract obstruction is:", a: ["ALT", "AST", "Alkaline Phosphatase", "Bilirubin"], correct: 2, meta: "Additional Batch" },
+                { q: "Primary Biliary Cholangitis (PBC) is most characteristically associated with:", a: ["Anti-mitochondrial antibodies (AMA)", "Anti-smooth muscle antibodies", "Anti-nuclear antibodies", "p-ANCA"], correct: 0, meta: "Additional Batch" },
+                { q: "Hepatocellular carcinoma is most commonly associated with:", a: ["Hepatitis B and C infections", "Excessive iron intake", "Vitamin deficiencies", "Gallstones"], correct: 0, meta: "Additional Batch" },
+                { q: "Reye syndrome is associated with:", a: ["Aspirin use in children with viral illness", "Alcohol abuse", "Overdose of acetaminophen", "Hemochromatosis"], correct: 0, meta: "Additional Batch" },
+                { q: "The characteristic microscopic finding in Chronic Pancreatitis is:", a: ["Parenchymal atrophy and fibrosis", "Acute neutrophilic infiltration", "Fat necrosis", "Massive hemorrhage"], correct: 0, meta: "Additional Batch" }
+            ],
+            "Renal": [
+                { q: "IgA depositions in mesangial cells are seen in:", a: ["Berger disease", "Alport syndrome", "Crescentic glomerulonephritis", "Goodpasture's syndrome"], correct: 0, meta: "Nov 2022, Paper II" },
+                { q: "All are true about renal cell carcinoma except:", a: ["Arises from PCT", "Invades renal vein", "Haematuria can occur", "More common in females"], correct: 3, meta: "Nov 2022, Paper II" },
+                { q: "Kimmelstiel Wilson nodules are characteristic of:", a: ["Amyloidosis", "Light chain deposition disease", "Myeloma kidney", "Diabetic Nephropathy"], correct: 3, meta: "Feb 2023, Paper I" },
+                { q: "Low and fixed Specific Gravity of Urine is found in:", a: ["Hypothyroidism", "Cushings Syndrome", "Melgs Syndrome", "Chronic Renal Failure"], correct: 3, meta: "Feb 2023, Paper I" },
+                { q: "\"Basket weave\" pattern of glomerular basement membrane is characteristic of:", a: ["Lupus nephritis", "Alport's syndrome", "Thin basement membrane", "Membranous nephropathy"], correct: 1, meta: "Feb 2023, Paper II" },
+                { q: "Most common variant of Renal cell carcinoma is:", a: ["Clear cell", "Papillary", "Chromophobe", "Collecting duct"], correct: 0, meta: "Feb 2023, Paper II" },
+                { q: "Steroid resistant nephritic syndrome caused by mutation in gene encoding:", a: ["Podocin", "Nephrin 1", "Alpha actinin 4", "Nephrin 2"], correct: 0, meta: "March 2024, Paper II" },
+                { q: "The commonest morphological variant of RCC is:", a: ["Granular cell type", "Papillary type", "Sarcomatoid type", "Clear cell type"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Pre renal protinuria occurs when protinuria is due to:", a: ["Diabetic glomerulopathy", "Nephrotic Syndrome", "Cystitis", "Cerebral injury"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Goodpasture's syndrome involves kidneys and:", a: ["Spleen", "Liver", "Lungs", "Pancreas"], correct: 2, meta: "March 2024, Paper II" },
+                { q: "Antibody implicated in pathophysiology of Berger's disease is:", a: ["IgG4", "IgG2", "IgM", "IgA"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Schistosomiasis has predilection for:", a: ["Spleen", "Liver", "Large intestine", "Urinary bladder"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "The most common type of kidney stone is:", a: ["Struvite", "Calcium oxalate", "Cystine", "Uric acid"], correct: 1, meta: "Dec 2024, Paper II" },
+                { q: "Which of the following is the most common cause of nephrotic syndrome in children?", a: ["Minimal change disease (MCD)", "Focal segmental glomerulosclerosis (FSGS)", "IgA nephropathy", "Membranous nephropathy"], correct: 0, meta: "Dec 2024, Paper II" },
+                { q: "Loss of foot processes in the glomerulus is a characteristic feature of:", a: ["Minimal change disease", "Acute glomerulonephritis", "Diabetic nephropathy", "Chronic glomerulonephritis"], correct: 0, meta: "Dec 2024, Paper II" },
+                { q: "Glomerulonephritis is due to:", a: ["Type II hypersensitivity reaction", "Type VI hypersensitivity reaction", "Type I hypersensitivity reaction", "Type III hypersensitivity reaction"], correct: 3, meta: "April 2025, Paper II" },
+                { q: "Crescent formation is characteristic of the following glomerular disease:", a: ["Rapidly progressive glomerulonephritis", "Amyloidosis", "Minimal change disease", "Focal segmental glomerulosclerosis"], correct: 0, meta: "April 2025, Paper II" },
+                { q: "The most common type of kidney stone is:", a: ["Uric acid", "Cystine", "Calcium oxalate", "Struvite"], correct: 2, meta: "April 2025, Paper II" },
+                { q: "The most common cause of nephrotic syndrome in adults is:", a: ["Diabetic nephropathy", "Membranous nephropathy", "Focal segmental glomerulosclerosis", "Minimal change disease"], correct: 1, meta: "Oct 2025, Paper II" },
+                { q: "The earliest renal change in diabetes mellitus is:", a: ["Hyaline arteriolosclerosis", "Microalbuminuria", "Glomerular hyperfiltration", "Nodular glomerulosclerosis"], correct: 2, meta: "Oct 2025, Paper II" }
+            ],
+            "Genital System": [
+                { q: "Gleason's classification is used for which cancer:", a: ["Breast", "Rectum", "Prostate", "Pancreas"], correct: 2, meta: "Nov 2022, Paper II" },
+                { q: "Risk factors for endometrial carcinoma are all except:", a: ["Smoking", "Obesity", "Infertility", "Tamoxifen"], correct: 0, meta: "Nov 2022, Paper II" },
+                { q: "Uterine leiomyoma is least likely to undergo:", a: ["Malignant change", "Calcification", "Red degeneration", "Hyaline change"], correct: 0, meta: "Nov 2022, Paper II" },
+                { q: "Tumor markers in testicular tumors are all except:", a: ["HCG", "LDH", "AFP", "CEA"], correct: 3, meta: "Nov 2022, Paper II" },
+                { q: "Gleason Scoring System is valid for grading of carcinoma originating in:", a: ["Kidney", "Urinary bladder", "Prostate", "Testes"], correct: 2, meta: "Feb 2023, Paper I" },
+                { q: "Transitional cell carcinoma is a histological feature of:", a: ["Carcinoma Gall bladder", "Carcinoma Urinary bladder", "Endometrial carcinoma", "Carcinoma Cervix"], correct: 1, meta: "Feb 2023, Paper II" },
+                { q: "Struma ovarii is a type of monodermal teratoma composed entirely of tissue of this organ:", a: ["Liver", "Kidney", "Spleen", "Thyroid"], correct: 3, meta: "Feb 2023, Paper II" },
+                { q: "Which is the commonest tumor of uterus?", a: ["Lipoma", "Leiomyoma", "Adenocarcinoma", "Fibroadenoma"], correct: 1, meta: "March 2024, Paper II" },
+                { q: "Gleason's score is related to carcinoma of:", a: ["Pancreas", "Pituitary gland", "Prostate", "Parathyroid gland"], correct: 2, meta: "March 2024, Paper II" },
+                { q: "A tumor marker often elevated in ovarian cancer is:", a: ["AFP", "CA 125", "PSA", "CEA"], correct: 1, meta: "Dec 2024, Paper II" },
+                { q: "A tumor marker often elevated in prostate cancer is:", a: ["CEA", "PSA", "CA 125", "AFP"], correct: 1, meta: "April 2025, Paper II" }
+            ],
+            "Breast": [
+                { q: "Which breast carcinoma is most often bilateral?", a: ["Invasive lobular carcinoma", "Ductal carcinoma in situ", "Paget disease", "Medullary carcinoma"], correct: 0, meta: "Oct 2025, Paper II" }
+            ],
+            "CNS": [
+                { q: "Most common CNS tumor is:", a: ["Astrocytoma", "Meningioma", "Medulloblastoma", "Oligodendroma"], correct: 1, meta: "Nov 2022, Paper II" },
+                { q: "Glioblastoma arises from:", a: ["Astrocytes", "Meninges", "Endothelial cells", "Neuronal cells"], correct: 0, meta: "Feb 2023, Paper II" },
+                { q: "Neurofibrillary tangles are characteristically seen in:", a: ["Parkinson's disease", "Multiple sclerosis", "Alzheimer's disease", "Prion disease"], correct: 2, meta: "March 2024, Paper II" },
+                { q: "Lewy bodies are characteristically seen in:", a: ["Alzheimer's disease", "Multiple sclerosis", "Prion disease", "Parkinson's disease"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Homer Wright rosettes are seen in:", a: ["Ependymoma", "Retinoblastoma", "Neurocytoma", "Medulloblastoma"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Most common primary malignant brain tumor in adults is:", a: ["Astrocytoma", "Glioblastoma multiforme", "Oligodendroglioma", "Meningioma"], correct: 1, meta: "Dec 2024, Paper II" },
+                { q: "Which of the following is the most common type of glial tumours:", a: ["Ependymoma", "Neurofibroma", "Astrocytoma", "Medulloblastoma"], correct: 2, meta: "April 2025, Paper II" },
+                { q: "Most common primary malignant brain tumor in children:", a: ["Craniopharyngioma", "Ependymoma", "Medulloblastoma", "Glioblastoma"], correct: 2, meta: "Oct 2025, Paper II" },
+                { q: "Which of the following is a characteristic finding in Alzheimer's disease?", a: ["Spongiform changes", "Pick bodies", "Lewy bodies", "Neurofibrillary tangles and amyloid plaques"], correct: 3, meta: "Oct 2025, Paper II" }
+            ],
+            "Endocrinology": [
+                { q: "Bronze diabetes is seen in:", a: ["Sarcoidosis", "Wilson's Disease", "Amyloidosis", "Hemachromatosis"], correct: 3, meta: "Nov 2022, Paper II" },
+                { q: "All are parts of MEN-I except:", a: ["Pituitary tumor", "Medullary carcinoma thyroid", "Pancreatic tumor", "Parathyroid tumor"], correct: 1, meta: "Nov 2022, Paper II" },
+                { q: "Amyloidosis is associated with medullary carcinoma arising from one of these organs:", a: ["Kidney", "Breast", "Thyroid", "Gall bladder"], correct: 2, meta: "Feb 2023, Paper I" },
+                { q: "A case of Pheochromocytoma is expected to show elevated serum levels of all except:", a: ["Norepinephrine", "Chromogranin A", "Catecholamines", "deoxycortisone"], correct: 3, meta: "Feb 2023, Paper II" },
+                { q: "MEN 1 syndrome includes all except:", a: ["Parathyroid hyperplasia", "Pituitary adenoma", "Pancreatic tumor", "Pheochromocytoma"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Lesion of thyroid associated with viral etiology is:", a: ["Grave's thyroiditis", "Hashimoto thyroiditis", "Riedel's thyroiditis", "DeQuervain's thyroiditis"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Increased serum calcitonin is observed in:", a: ["Medullary carcinoma Thyroid", "Follicular carcinoma Thyroid", "Anaplastic carcinoma Thyroid", "Papillary carcinoma Thyroid"], correct: 0, meta: "March 2024, Paper II" },
+                { q: "Orphan Annie Eye type nuclei is observed in:", a: ["Papillary carcinoma Thyroid", "Follicular carcinoma Thyroid", "Anaplastic carcinoma Thyroid", "Medullary carcinoma Thyroid"], correct: 0, meta: "March 2024, Paper II" },
+                { q: "Which type of Thyroid cancer shows Psammoma bodies?", a: ["Anaplastic carcinoma", "Follicular carcinoma", "Medullary carcinoma", "Papillary carcinoma"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Lesion of thyroid with autoimmune etiology is:", a: ["Grave's thyroiditis", "Hashimoto's thyroiditis", "Riedel's thyroiditis", "DeQuervain's thyroiditis"], correct: 1, meta: "Dec 2024, Paper II" },
+                { q: "Primary genetic mutation associated with MEN 2B is:", a: ["TP53 gene", "PTEN gene", "RET proto-oncogene", "BRCA1 gene"], correct: 2, meta: "April 2025, Paper II" },
+                { q: "\"Orphan Annie eye nuclei\" are seen in:", a: ["Anaplastic carcinoma", "Medullary carcinoma", "Papillary carcinoma", "Follicular carcinoma"], correct: 2, meta: "Oct 2025, Paper II" }
+            ],
+            "Musculoskeletal System": [
+                { q: "An epiphyseal bone lesion is:", a: ["Chondroblastoma", "Ewing's sarcoma", "Chondromyxoid fibroma", "Osteogenic sarcoma"], correct: 0, meta: "Nov 2022, Paper II" },
+                { q: "Tophus is pathognomonic of which condition:", a: ["Multiple myeloma", "Cystinosis", "Gout", "Arthritis"], correct: 2, meta: "Feb 2023, Paper I" },
+                { q: "Osteoporosis may be secondary to all of the following except:", a: ["Pregnancy", "Prolonged weightlessness in space", "Warfarin therapy", "Multiple myeloma"], correct: 0, meta: "Feb 2023, Paper II" },
+                { q: "\"Joint mice\" is a feature of:", a: ["Rheumatoid arthritis", "Psoriatic arthritis", "Osteoarthritis", "Infectious arthritis"], correct: 2, meta: "Feb 2023, Paper II" },
+                { q: "Tumor of bone that usually affects children and adolescents is:", a: ["Ewing's sarcoma", "Osteoclastoma", "Chondrosarcoma", "Osteosarcoma"], correct: 0, meta: "March 2024, Paper II" },
+                { q: "Soap bubble appearance on radiology is expressed by:", a: ["Osteosarcoma", "Osteoclastoma", "Chondrosarcoma", "Chondroma"], correct: 1, meta: "March 2024, Paper II" },
+                { q: "Which of the following is the most common primary malignant bone tumor?", a: ["Ewing sarcoma", "Giant cell tumor", "Osteosarcoma", "Chondrosarcoma"], correct: 2, meta: "April 2025, Paper II" },
+                { q: "Which of the following is a risk factor for impaired bone fracture healing?", a: ["Corticosteroid use", "Diabetes mellitus", "Malnutrition", "All of the above"], correct: 3, meta: "April 2025, Paper I" },
+                { q: "The most common primary malignant bone tumor in children is:", a: ["Osteosarcoma", "Multiple myeloma", "Giant cell tumor", "Chondrosarcoma"], correct: 3, meta: "Oct 2025, Paper II" }
+            ],
+            "Skin Pathology": [
+                { q: "Kaposi's sarcoma is associated with:", a: ["HCV", "HSV", "HPV", "HHV"], correct: 3, meta: "Nov 2022, Paper I" },
+                { q: "Rodent ulcer is due to:", a: ["Burns", "TB", "Basal cell carcinoma", "Syphilis"], correct: 2, meta: "Nov 2022, Paper II" },
+                { q: "Cyatte bodies are pathognomonic for:", a: ["Lichen planus", "Lupus erythematosus", "Seborrheic dermatitis", "Psoriasis"], correct: 0, meta: "Feb 2023, Paper II" },
+                { q: "This disease affects relatively cool tissues of the skin and extremities:", a: ["Scleroderma", "Syphilis", "Leprosy", "Tuberculosis"], correct: 2, meta: "Feb 2023, Paper II" },
+                { q: "A disorder of complete loss of pigment producing melanocytes in epidermis is:", a: ["Ephelis", "Lentigo", "Melasma", "Vitiligo"], correct: 3, meta: "Feb 2023, Paper II" },
+                { q: "Munro microabscess are pathognomonic for:", a: ["Lupus vulgaris", "Lichen planus", "Psoriasis", "Pemphigus"], correct: 2, meta: "March 2024, Paper II" },
+                { q: "Skin disease with vesicobullous lesions is:", a: ["Lupus vulgaris", "Lichen planus", "Psoriasis", "Pemphigus"], correct: 3, meta: "March 2024, Paper II" },
+                { q: "Molluscum contagiosum is caused by:", a: ["A bacterium", "A virus", "A parasite", "A fungus"], correct: 1, meta: "Dec 2024, Paper II" },
+                { q: "Which virus is associated with Kaposi's sarcoma in HIV patients?", a: ["CMV", "HHV-8", "HPV", "EBV"], correct: 1, meta: "Oct 2025, Paper I" },
+                { q: "\"Rodent ulcer\" is a clinical term for:", a: ["Kaposi sarcoma", "Basal cell carcinoma", "Melanoma", "Squamous cell carcinoma"], correct: 1, meta: "Oct 2025, Paper II" }
+            ],
+            "Hematology: RBC": [
+                { q: "Reticulocytes are stained with:", a: ["Sudan Black", "Methyl Violet", "Carmine", "Brilliant Cresyl Blue"], correct: 3, meta: "Nov 2022, Paper I" },
+                { q: "In pernicious anaemia, antibody are formed against:", a: ["G-cell", "Stem cell", "Parietal cell", "Paneth cell"], correct: 2, meta: "Nov 2022, Paper II" },
+                { q: "Variation in RBC size is expressed by:", a: ["RDW", "MCV", "MCHC", "MCH"], correct: 0, meta: "Feb 2023, Paper I" },
+                { q: "Mutation in β globin gene is seen in:", a: ["Sickle cell anemia", "Hereditary Spherocytosis", "Thalassemia", "Polycythemia"], correct: 0, meta: "March 2024, Paper I" },
+                { q: "Red cell distribution width (RDW) is used for estimation of:", a: ["Chromasia", "Hemolysis", "Poikilocytosis", "Anisocytosis"], correct: 3, meta: "March 2024, Paper I" },
+                { q: "Sickle cell trait protects against:", a: ["Trypanosomiasis", "Leishmaniasis", "Filariasis", "Malaria"], correct: 3, meta: "March 2024, Paper I" },
+                { q: "Hypersegmented neutrophils are present in which of the following anemia?", a: ["Iron deficiency", "Hemolytic", "Megaloblastic", "Aplastic"], correct: 2, meta: "June 2024, Paper I" },
+                { q: "Anaemia in humans can be caused by which of the following worms:", a: ["Tape worm", "Round worm", "Bristle worm", "Hook worm"], correct: 3, meta: "June 2024, Paper I" },
+                { q: "All are features of hemolytic anemia EXCEPT:", a: ["Bilirubinemia", "Hemoglobinemia", "Increased Haptoglobin", "Reticulocytosis"], correct: 2, meta: "June 2024, Paper I" },
+                { q: "A 40-year-old woman presents with memory impairment, irritability, and abdominal pain. She lives in an old house with peeling paint. Blood tests reveal microcytic anemia. What is the most likely diagnosis?", a: ["Thalassemia", "Lead poisoning", "Hemochromatosis", "Mercury poisoning"], correct: 1, meta: "Dec 2024, Paper I" },
+                { q: "Howell-Jolly bodies are seen in:", a: ["Asplenia", "Hemolytic anemia", "Iron deficiency anemia", "Megaloblastic anemia"], correct: 0, meta: "Dec 2024, Paper I" },
+                { q: "The most common causes of Megaloblastic anemia are deficiencies in:", a: ["Vitamin K and calcium", "Vitamin A and zinc", "Vitamin B12 and folate", "Iron and vitamin C"], correct: 2, meta: "April 2025, Paper I" },
+                { q: "Reticulocyte staining is done by:", a: ["Giemsa stain", "Supravital stain", "PAS stain", "Hematoxylin and eosin"], correct: 1, meta: "Oct 2025, Paper I" },
+                { q: "Spectrin deficiency in RBCs is responsible for:", a: ["G6PD deficiency", "Hereditary spherocytosis", "Sickle cell anemia", "Alpha Thalassemia"], correct: 1, meta: "Oct 2025, Paper I" },
+                { q: "A female patient 23 years of age, who has just delivered, presents with breathlessness and generalized weakness. Lab: Hb 9 gm%, MCV 136. Likely diagnosis:", a: ["Megaloblastic anemia", "Beta thalassemia", "Iron deficiency anemia", "Anemia of chronic renal failure"], correct: 0, meta: "Oct 2025, Paper I" }
+            ],
+            "Hematology: WBC": [
+                { q: "Reed Sternberg cells are found in:", a: ["CML", "Sickle cell anaemia", "ALL", "Hodgkin's Lymphoma"], correct: 3, meta: "Nov 2022, Paper I" },
+                { q: "Auer rods are found in:", a: ["Megakaryoblast", "Myeloblast", "Lymphoblast", "Erythroblast"], correct: 1, meta: "Nov 2022, Paper I" },
+                { q: "Smudge cells in peripheral smear are commonly seen in:", a: ["AML", "ALL", "CLL", "CML"], correct: 2, meta: "Nov 2022, Paper I" },
+                { q: "Cell diagnostic of Hodgkin's lymphoma is:", a: ["Histiocyte", "Hairy cell", "Faggot cell", "Reed Sternberg cell"], correct: 3, meta: "Feb 2023, Paper I" },
+                { q: "Auer rod is a characteristic feature of Leukemic blast of which lineage?", a: ["B-Lymphoblast", "T-Lymphoblast", "Myeloblast", "Erythroblast"], correct: 2, meta: "Feb 2023, Paper I" },
+                { q: "Which variant of Hodgkin's lymphoma has best prognosis:", a: ["Mixed cellularity", "Nodular sclerosis", "Lymphocyte predominant", "Lymphocyte depleted"], correct: 2, meta: "March 2024, Paper I" },
+                { q: "Which variant of Hodgkin's lymphoma has worst prognosis:", a: ["Lymphocyte depleted", "Lymphocyte predominant", "Nodular sclerosis", "Mixed cellularity"], correct: 0, meta: "June 2024, Paper I" },
+                { q: "Chronic lymphocytic leukemia (CLL) is most commonly diagnosed in which age group?", a: ["Adolescents", "Young adults", "Children", "Older adults"], correct: 3, meta: "Dec 2024, Paper I" },
+                { q: "Pancytopenia with hypercellular marrow is characteristic of:", a: ["Aplastic anemia", "Paroxysmal nocturnal", "Myelofibrosis", "Myelodysplastic syndrome"], correct: 3, meta: "Dec 2024, Paper I" },
+                { q: "The hallmark genetic abnormality in Chronic Myelogenous Leukemia (CML) is:", a: ["Deletion of chromosome 13", "Point mutation in the p53 gene", "Philadelphia chromosome", "Trisomy 21"], correct: 2, meta: "April 2025, Paper I" },
+                { q: "Acute lymphocytic leukemia (ALL) is most commonly diagnosed in which age group?", a: ["Young adults", "Older adults", "Adolescents", "Children"], correct: 3, meta: "April 2025, Paper I" },
+                { q: "A 7-year-old child with generalized lymphadenopathy and mediastinal mass shows \"starry-sky\" appearance. Diagnosis:", a: ["Multiple myeloma", "Follicular lymphoma", "Burkitt's lymphoma", "Hodgkin's lymphoma"], correct: 2, meta: "Oct 2025, Paper I" },
+                { q: "Reed-Sternberg cells are pathognomonic for:", a: ["Burkitt lymphoma", "Multiple myeloma", "Hodgkin lymphoma", "Non-Hodgkin lymphoma"], correct: 2, meta: "Oct 2025, Paper II" }
+            ],
+            "Platelet & Bleeding Disorders": [
+                { q: "Haemophilia A is characterized by:", a: ["Prolonged PTT", "Abnormal BT", "Low platelet count", "Prolonged PT"], correct: 0, meta: "Nov 2022, Paper I" },
+                { q: "Christmas factor is:", a: ["VIII", "VII", "X", "IX"], correct: 3, meta: "June 2024, Paper I" },
+                { q: "Microangiopathic hemolytic anemia is associated with which of the following conditions:", a: ["Thalassemia", "Disseminated intravascular coagulation", "Sickle cell anemia", "Pernicious anemia"], correct: 1, meta: "Dec 2024, Paper I" },
+                { q: "Hemophilia B is a bleeding disorder caused by a deficiency in:", a: ["Platelets", "Vitamin K", "Factor IX", "Factor VIII"], correct: 2, meta: "April 2025, Paper I" }
+            ],
+            "Blood Banking": [
+                { q: "Hypersensitivity reaction in blood transfusion reaction is:", a: ["Type III", "Cell Mediated", "Cytotoxic type", "Anaphylactic type"], correct: 3, meta: "Nov 2022, Paper I" },
+                { q: "How is Fresh Frozen Plasma stored?", a: ["Refrigerated at 2-8°C", "Frozen at -18°C or colder", "At room temperature", "Lyophilized"], correct: 1, meta: "Dec 2024, Paper I" },
+                { q: "The standard storage temperature for packed red blood cells is:", a: ["22°C", "37°C", "4°C", "-20°C"], correct: 2, meta: "April 2025, Paper I" },
+                { q: "The standard storage temperature for FFP in blood bank:", a: ["37°C", "22°C", "4°C", "-20°C"], correct: 3, meta: "Oct 2025, Paper I" },
+                { q: "What is the most common post-transfusion hepatitis?", a: ["Hepatitis B", "Hepatitis C", "Hepatitis A", "Hepatitis E"], correct: 1, meta: "Oct 2025, Paper II" }
+            ]
+        };
+
+        function populateUnitsGrid(unitsToRender = PATHOLOGY_UNITS) {
+            const grid = document.getElementById('unitsGrid');
+            if (unitsToRender.length === 0) {
+                grid.innerHTML = '<div style="color: #0f172a; opacity: 0.8; grid-column: 1/-1; text-align: center; padding: 2rem;">No pathology units match your search.</div>';
+                return;
+            }
+            grid.innerHTML = unitsToRender.map((unit) => {
+                const originalIndex = PATHOLOGY_UNITS.indexOf(unit) + 1;
+                const count = MCQ_DATABASE[unit] ? MCQ_DATABASE[unit].length : 0;
+                return `
+                    <div class="unit-card" onclick="openQuiz('${escapeHTML(unit)}')">
+                        <div class="unit-num-badge">${originalIndex}</div>
+                        <div class="unit-info">
+                            <div class="unit-title">${unit}</div>
+                            <div class="unit-meta">
+                                <i class="fa-solid fa-clipboard-question"></i> ${count} PYQs Available
+                            </div>
+                        </div>
+                        <div class="unit-arrow">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterUnits() {
+            const query = document.getElementById('unitSearchInput').value.toLowerCase().trim();
+            const filtered = PATHOLOGY_UNITS.filter(unit => unit.toLowerCase().includes(query));
+            populateUnitsGrid(filtered);
+        }
+
+        let activeQuizUnit = "";
+        let currentQuestionIndex = 0;
+        let userAnswers = {};
+        let correctStreak = 0;
+        let wrongStreak = 0;
+
+        function openQuiz(unitName) {
+            if (!MCQ_DATABASE[unitName] || MCQ_DATABASE[unitName].length === 0) {
+                showDynamicIsland("No MCQs added for this unit yet!", "fa-circle-exclamation", "#f59e0b");
+                return;
+            }
+            activeQuizUnit = unitName;
+            currentQuestionIndex = 0;
+            userAnswers = {};
+            correctStreak = 0;
+            wrongStreak = 0;
+
+            document.getElementById('quizUnitTitleHeader').innerText = unitName;
+            document.getElementById('homeScreen').classList.remove('active');
+            document.getElementById('quizScreen').classList.add('active');
+
+            renderQuizQuestion();
+            renderQuestionNavigator();
+        }
+
+        function renderQuizQuestion() {
+            const questions = MCQ_DATABASE[activeQuizUnit];
+            const qObj = questions[currentQuestionIndex];
+            const container = document.getElementById('quizContainerBox');
+            const searchContainer = document.getElementById('googleSearchButtonContainer');
+            const answeredState = userAnswers[currentQuestionIndex];
+
+            container.innerHTML = `
+                <div class="question-meta-tag"><i class="fa-solid fa-calendar-days"></i> ${qObj.meta} &bull; Q ${currentQuestionIndex + 1} of ${questions.length}</div>
+                <div class="question-text">${qObj.q}</div>
+                <div class="options-list">
+                    ${qObj.a.map((opt, idx) => {
+                        let btnClass = "option-btn";
+                        let disabledAttr = "";
+                        if (answeredState !== undefined) {
+                            disabledAttr = "disabled";
+                            if (idx === qObj.correct) {
+                                btnClass += " correct";
+                            } else if (idx === answeredState && idx !== qObj.correct) {
+                                btnClass += " wrong";
+                            }
+                        }
+                        return `<button class="${btnClass}" ${disabledAttr} onclick="selectOption(${idx})">${String.fromCharCode(65 + idx)}. ${opt}</button>`;
+                    }).join('')}
+                </div>
+                <div class="quiz-actions">
+                    <button class="btn-action" onclick="prevQuestion()" ${currentQuestionIndex === 0 ? 'style="opacity:0.4; pointer-events:none;"' : ''}>
+                        <i class="fa-solid fa-arrow-left"></i> Previous
+                    </button>
+                    <button class="btn-action" onclick="nextQuestion()" ${currentQuestionIndex === questions.length - 1 ? 'style="opacity:0.4; pointer-events:none;"' : ''}>
+                        Next <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            `;
+
+            const fullSearchText = `Answer this exact MCQ and explain the correct answer. Question: ${qObj.q} Options: ${qObj.a.map((opt, idx) => `${String.fromCharCode(65 + idx)}. ${opt}`).join(' | ')} ${qObj.meta ? `Exam: ${qObj.meta}.` : ''}`;
+            searchContainer.innerHTML = `
+                <button class="btn-gemini-search" onclick="searchQuestionOnAI('${encodeURIComponent(fullSearchText)}')" title="Search this exact MCQ in Google AI Mode">
+                    <span class="gemini-logo" aria-hidden="true"></span>
+                    <span class="gemini-search-label">Search on Gemini</span>
+                </button>
+            `;
+        }
+
+        function selectOption(selectedIndex) {
+            if (userAnswers[currentQuestionIndex] !== undefined) return;
+
+            const qObj = MCQ_DATABASE[activeQuizUnit][currentQuestionIndex];
+            userAnswers[currentQuestionIndex] = selectedIndex;
+
+            if (selectedIndex === qObj.correct) {
+                correctStreak++;
+                wrongStreak = 0;
+                if (correctStreak > 0 && correctStreak % 3 === 0) {
+                    triggerStreakPopup(true);
+                }
+            } else {
+                wrongStreak++;
+                correctStreak = 0;
+                if (wrongStreak > 0 && wrongStreak % 3 === 0) {
+                    triggerStreakPopup(false);
+                }
+            }
+
+            renderQuizQuestion();
+            renderQuestionNavigator();
+        }
+
+        function triggerStreakPopup(isCorrectStreak) {
+            const congratMsgs = [
+                `Awesome job, ${currentUsername}! 3 correct streak! 🚀`,
+                `Incredible focus, ${currentUsername}! Keep crushing it! 🔥`,
+                `Brilliant diagnostics, ${currentUsername}! 3 in a row! ⭐`,
+                `You're on fire, ${currentUsername}! Unstoppable progress! 💡`
+            ];
+            const motiveMsgs = [
+                `Keep your head up, ${currentUsername}! Mistakes are lessons. 💪`,
+                `Stay focused, ${currentUsername}! Review & bounce back! 🎯`,
+                `Don't give up, ${currentUsername}! Every PYQ sharpens you. 🧠`
+            ];
+
+            const msg = isCorrectStreak 
+                ? congratMsgs[Math.floor(Math.random() * congratMsgs.length)]
+                : motiveMsgs[Math.floor(Math.random() * motiveMsgs.length)];
+            
+            const icon = isCorrectStreak ? "fa-fire" : "fa-shield-heart";
+            const color = isCorrectStreak ? "#22c55e" : "#f59e0b";
+
+            showDynamicIsland(msg, icon, color);
+        }
+
+        function showDynamicIsland(text, iconClass, iconColor) {
+            const island = document.getElementById('dynamicIsland');
+            const txtElem = document.getElementById('islandText');
+            const iconElem = document.getElementById('islandIcon');
+
+            txtElem.innerText = text;
+            iconElem.className = `fa-solid ${iconClass}`;
+            iconElem.style.color = iconColor;
+
+            island.classList.add('show');
+            setTimeout(() => {
+                island.classList.remove('show');
+            }, 3200);
+        }
+
+        function searchQuestionOnAI(encodedQuery) {
+            window.open(`https://www.google.com/search?udm=50&q=${encodedQuery}`, '_blank');
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < MCQ_DATABASE[activeQuizUnit].length - 1) {
+                currentQuestionIndex++;
+                renderQuizQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuizQuestion();
+            }
+        }
+
+        function jumpToQuestion(index) {
+            currentQuestionIndex = index;
+            renderQuizQuestion();
+            renderQuestionNavigator();
+        }
+
+        function renderQuestionNavigator() {
+            const questions = MCQ_DATABASE[activeQuizUnit];
+            const navGrid = document.getElementById('questionNavigatorGrid');
+            navGrid.innerHTML = questions.map((q, idx) => {
+                let cls = "nav-dot";
+                if (idx === currentQuestionIndex) cls += " active";
+                const ans = userAnswers[idx];
+                if (ans !== undefined) {
+                    if (ans === q.correct) cls += " answered-correct";
+                    else cls += " answered-wrong";
+                }
+                return `<div class="${cls}" onclick="jumpToQuestion(${idx})">${idx + 1}</div>`;
+            }).join('');
+        }
+
+        const FALLBACK_QUOTES = [
+            { text: "Pathology is the foundation of clinical medicine - master the disease to master the cure.", author: "William Osler" },
+            { text: "Every slide holds a story waiting to be diagnosed by a keen mind.", author: "Pathology Wisdom" },
+            { text: "Success in Medicine isn't about greatness; it's about consistency. Hard work gains success.", author: "Medical Journal" },
+            { text: "The eyes do not see what the mind does not know. Keep learning!", author: "Diagnostic Creed" },
+            { text: "Small steps in daily study lead to gigantic triumphs on exam day.", author: "ABVMU Mentor" }
+        ];
+
+        async function fetchWebMotivation() {
+            const textElem = document.getElementById('quoteText');
+            const authorElem = document.getElementById('quoteAuthor');
+            
+            try {
+                const res = await fetch('https://dummyjson.com/quotes/random');
+                if (!res.ok) throw new Error('Network error');
+                const data = await res.json();
+                
+                textElem.innerText = `"${data.quote}"`;
+                authorElem.innerText = `-- ${data.author}`;
+            } catch (err) {
+                const rand = FALLBACK_QUOTES[Math.floor(Math.random() * FALLBACK_QUOTES.length)];
+                textElem.innerText = `"${rand.text}"`;
+                authorElem.innerText = `-- ${rand.author}`;
+            }
+        }
+
+        // Cat Logic
+        const canvas = document.getElementById('petCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const pawPrints = [];
+
+        class PawPrint {
+            constructor(x, y, angle, side) {
+                this.x = x;
+                this.y = y;
+                this.angle = angle;
+                this.side = side;
+                this.createdAt = Date.now();
+                this.delayMs = 1800;
+                this.fadeDurationMs = 1200;
+                this.opacity = 1;
+            }
+
+            draw() {
+                const now = Date.now();
+                const age = now - this.createdAt;
+
+                if (age > this.delayMs) {
+                    const fadeProgress = (age - this.delayMs) / this.fadeDurationMs;
+                    this.opacity = 1 - fadeProgress;
+                }
+
+                if (this.opacity <= 0) return;
+
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+
+                const sideOffset = this.side * 5;
+                ctx.fillStyle = `rgba(244, 114, 182, ${0.6 * this.opacity})`;
+
+                ctx.beginPath();
+                ctx.ellipse(0, sideOffset, 3.5, 2.5, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(3.5, sideOffset - 3, 1, 0, Math.PI * 2);
+                ctx.arc(4.5, sideOffset - 1, 1, 0, Math.PI * 2);
+                ctx.arc(4.5, sideOffset + 1, 1, 0, Math.PI * 2);
+                ctx.arc(3.5, sideOffset + 3, 1, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            isExpired() {
+                return Date.now() - this.createdAt > (this.delayMs + this.fadeDurationMs);
+            }
+        }
+
+        class WhiteKitten {
+            constructor() {
+                this.length = 24;
+                this.width = 13;
+                this.angle = Math.random() * Math.PI * 2;
+                this.targetAngle = this.angle;
+                
+                this.speed = 2.2;
+                this.normalSpeed = 2.2;
+                this.runSpeed = 5.2;
+                
+                this.state = 'WALKING';
+                this.stateTimer = 0;
+                this.tailAngle = 0;
+                this.lastPawTime = 0;
+                this.pawSide = 1;
+
+                this.x = window.innerWidth / 2;
+                this.y = window.innerHeight / 2;
+                this.pickNewDestinationAcrossEntireScreen();
+            }
+
+            pickNewDestinationAcrossEntireScreen() {
+                const margin = 50;
+                this.targetX = Math.random() * (window.innerWidth - margin * 2) + margin;
+                this.targetY = Math.random() * (window.innerHeight - margin * 2) + margin;
+            }
+
+            update() {
+                if (!document.getElementById('titleScreen').classList.contains('active')) {
+                    return;
+                }
+
+                this.stateTimer++;
+                this.tailAngle = Math.sin(this.stateTimer * 0.14) * 0.4;
+
+                if (this.state === 'RUNNING') {
+                    this.speed = this.runSpeed;
+                    if (this.stateTimer > 120) {
+                        this.state = 'WALKING';
+                        this.speed = this.normalSpeed;
+                        this.stateTimer = 0;
+                        this.pickNewDestinationAcrossEntireScreen();
+                    }
+                } else if (this.state === 'RESTING') {
+                    if (this.stateTimer > 140) {
+                        this.state = 'WALKING';
+                        this.stateTimer = 0;
+                        this.pickNewDestinationAcrossEntireScreen();
+                    }
+                    return;
+                } else if (this.state === 'WALKING') {
+                    if (this.stateTimer > 200 && Math.random() < 0.01) {
+                        this.state = 'RESTING';
+                        this.stateTimer = 0;
+                        return;
+                    }
+                }
+
+                const dx = this.targetX - this.x;
+                const dy = this.targetY - this.y;
+                const dist = Math.hypot(dx, dy);
+
+                if (dist < 25) {
+                    if (this.state === 'RUNNING') {
+                        this.pickNewDestinationAcrossEntireScreen();
+                    } else {
+                        this.state = 'RESTING';
+                        this.stateTimer = 0;
+                    }
+                } else {
+                    this.targetAngle = Math.atan2(dy, dx);
+                    
+                    let diff = this.targetAngle - this.angle;
+                    while (diff < -Math.PI) diff += Math.PI * 2;
+                    while (diff > Math.PI) diff -= Math.PI * 2;
+                    this.angle += diff * 0.15;
+
+                    this.x += Math.cos(this.angle) * this.speed;
+                    this.y += Math.sin(this.angle) * this.speed;
+
+                    const now = Date.now();
+                    if (now - this.lastPawTime > (200 / (this.speed / 2))) {
+                        pawPrints.push(new PawPrint(this.x, this.y, this.angle, this.pawSide));
+                        this.pawSide *= -1;
+                        this.lastPawTime = now;
+                    }
+                }
+            }
+
+            scare(clickX, clickY) {
+                this.state = 'RUNNING';
+                this.stateTimer = 0;
+                
+                const dx = this.x - clickX;
+                const dy = this.y - clickY;
+                const angle = Math.atan2(dy, dx);
+                
+                this.targetX = Math.min(Math.max(this.x + Math.cos(angle) * 350, 50), window.innerWidth - 50);
+                this.targetY = Math.min(Math.max(this.y + Math.sin(angle) * 350, 50), window.innerHeight - 50);
+            }
+
+            draw() {
+                if (!document.getElementById('titleScreen').classList.contains('active')) {
+                    return;
+                }
+
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+                ctx.beginPath();
+                ctx.ellipse(-2, 5, this.length * 0.9, this.width * 0.8, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.ellipse(-2, 0, this.length * 0.7, this.width * 0.7, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(10, 0, 9.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#f8fafc';
+                ctx.beginPath();
+                ctx.moveTo(8, -7); ctx.lineTo(16, -13); ctx.lineTo(13, -4); ctx.closePath(); ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(8, 7); ctx.lineTo(16, 13); ctx.lineTo(13, 4); ctx.closePath(); ctx.fill();
+
+                ctx.fillStyle = '#f472b6';
+                ctx.beginPath();
+                ctx.moveTo(9, -7); ctx.lineTo(14, -11); ctx.lineTo(12, -5); ctx.closePath(); ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(9, 7); ctx.lineTo(14, 11); ctx.lineTo(12, 5); ctx.closePath(); ctx.fill();
+
+                ctx.save();
+                ctx.translate(-14, 0);
+                ctx.rotate(this.tailAngle);
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 4.5;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.quadraticCurveTo(-10, 6, -18, 2);
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.fillStyle = '#fb7185';
+                ctx.beginPath();
+                ctx.arc(18.5, 0, 1.8, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = 'rgba(148, 163, 184, 0.8)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(14, -2); ctx.lineTo(21, -8);
+                ctx.moveTo(14, -1); ctx.lineTo(22, -2);
+                ctx.moveTo(14, 2); ctx.lineTo(21, 8);
+                ctx.moveTo(14, 1); ctx.lineTo(22, 2);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+        }
+
+        let kitten;
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const isTitleActive = document.getElementById('titleScreen').classList.contains('active');
+
+            if (isTitleActive) {
+                for (let i = pawPrints.length - 1; i >= 0; i--) {
+                    pawPrints[i].draw();
+                    if (pawPrints[i].isExpired()) {
+                        pawPrints.splice(i, 1);
+                    }
+                }
+
+                if (kitten) {
+                    kitten.update();
+                    kitten.draw();
+                }
+            } else {
+                pawPrints.length = 0;
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('load', () => {
+            initUserSession();
+            populateUnitsGrid();
+            kitten = new WhiteKitten();
+            animate();
+        });
+
+        window.addEventListener('pointerdown', (e) => {
+            if (kitten && document.getElementById('titleScreen').classList.contains('active')) {
+                const dist = Math.hypot(e.clientX - kitten.x, e.clientY - kitten.y);
+                if (dist < 100) {
+                    kitten.scare(e.clientX, e.clientY);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
